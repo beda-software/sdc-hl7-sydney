@@ -1,0 +1,80 @@
+stages:
+  - build
+  - release
+  # - deploy
+  - cleanup
+
+variables:
+  FRONTEND_CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_BUILD_REF_NAME
+  FRONTEND_BUILD_IMAGE: rgv-frontend:$CI_BUILD_REF
+  BACKEND_CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_BUILD_REF_NAME
+  BACKEND_BUILD_IMAGE: rgv-backend:$CI_BUILD_REF
+
+
+build-frontend:
+  stage: build
+  script:
+    - docker build -t $FRONTEND_BUILD_IMAGE frontend
+
+release-frontend:
+  stage: release
+  before_script:
+    - git submodule sync --recursive
+    - git submodule update --init --recursive
+  script:
+    - docker tag $FRONTEND_BUILD_IMAGE $FRONTEND_CONTAINER_RELEASE_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $FRONTEND_CONTAINER_RELEASE_IMAGE
+  only:
+    - master
+
+build-backend:
+  stage: build
+  script:
+    - docker build -t $BACKEND_BUILD_IMAGE backend
+
+release-backend:
+  stage: release
+  before_script:
+    - git submodule sync --recursive
+    - git submodule update --init --recursive
+  script:
+    - docker tag $BACKEND_BUILD_IMAGE $BACKEND_CONTAINER_RELEASE_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $BACKEND_CONTAINER_RELEASE_IMAGE
+  only:
+    - master
+
+
+    
+# deploy:
+#   stage: deploy
+#   before_script:
+#   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+#   - docker pull registry.bro.engineering/ansible_deploy/helm_deploy:master 
+#   script: >
+#     echo "$K8S_CONFIG" > K8S_CONFIG &&
+#     unset K8S_CONFIG &&
+#     unset CI_COMMIT_DESCRIPTION &&
+#     unset CI_COMMIT_MESSAGE &&
+#     env > .ci-env &&
+#     K8S_CONFIG=`cat K8S_CONFIG` &&
+#     docker run --rm 
+#     -v $CI_PROJECT_DIR/chart:/src
+#     --env K8S_CONFIG="$K8S_CONFIG"
+#     --env-file .ci-env
+#     --entrypoint sh 
+#     registry.bro.engineering/ansible_deploy/helm_deploy:master 
+#     /src/deploy.sh $CI_COMMIT_SHA
+#   after_script: 
+#     - rm .ci-env
+#     - rm K8S_CONFIG
+#   only:
+#     - master
+    
+cleanup:
+  stage: cleanup
+  script:
+    - bash -c "[ -z $(docker images -q $FRONTEND_BUILD_IMAGE) ] || docker rmi $FRONTEND_BUILD_IMAGE"
+    - bash -c "[ -z $(docker images -q $BACKEND_BUILD_IMAGE) ] || docker rmi $BACKEND_BUILD_IMAGE"
+  when: always
