@@ -1,6 +1,6 @@
 import React from 'react';
 import * as _ from 'lodash';
-import { Col, Row, Button, List, Spin } from 'antd';
+import { Button, List, Spin } from 'antd';
 import { getFHIRResources, extractBundleResources } from '../../contrib/aidbox-react/services/fhir';
 import { useService } from '../../contrib/aidbox-react/hooks/service';
 import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
@@ -14,19 +14,20 @@ export function QuestionnairesList() {
         const questionnaires = resourcesByType.Questionnaire
 
         return (
-            <Row>
-                <Col span={24}>
+            <>
+                <div style={{ display: 'flex' }}>
+                    <h2>Questionnaires</h2>
                     <Link to='/questionnaire/new'>
                         <Button type='default'>CreateQuestionnaire</Button>
                     </Link>
-                </Col>
-                
-                <h2>Add new response</h2>
+                </div>
+
+                <hr />
                 <List>
                     {questionnaires && questionnaires.length ? (
                         _.map(questionnaires, (questionnaire) => (
                             <List.Item key={questionnaire.id}>
-                                <Link to={`/questionnaire/edit/${questionnaire.id}` }>
+                                <Link to={`/questionnaire/edit/${questionnaire.id}`}>
                                     {questionnaire.title}{'  '}
                                 </Link>
                                 <Link to={`/questionnaire/fill/${questionnaire.id}`}>
@@ -40,7 +41,7 @@ export function QuestionnairesList() {
                         ))
                     ) : <p>No questionnaires added</p>}
                 </ List>
-            </Row>
+            </>
         );
     }
     return <Spin />

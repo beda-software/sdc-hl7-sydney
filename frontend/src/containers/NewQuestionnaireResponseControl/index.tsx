@@ -32,7 +32,7 @@ export function NewQuestionnaireResponseControl(props: any) {
                             <h2>New {questionnaire.title}</h2>
                             <QuestionnaireResponseForm
                                 questionnaire={questionnaire}
-                                resource={{ resourceType: 'QuestionnaireResponse', status: 'patient' }}
+                                resource={{ resourceType: 'QuestionnaireResponse', status: 'patient', questionnaire: questionnaireId }}
                                 onSave={async (resource) => {
                                     const response = await saveFHIRResource({
                                         ...resource,
