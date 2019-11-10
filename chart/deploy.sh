@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/bash -x
 mkdir -p /root/.kube/
 echo "$K8S_CONFIG" > /root/.kube/config
 cd /src
