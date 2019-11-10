@@ -16,8 +16,6 @@ export function NewQuestionnaireResponseControl(props: any) {
 
     return (
         <>
-            <p>123</p>
-            <pre>{JSON.stringify(questionnaireId, undefined, 2)}</pre>
             <Resolver
                 resolve={() =>
                     getFHIRResource<Questionnaire>(
@@ -30,23 +28,26 @@ export function NewQuestionnaireResponseControl(props: any) {
             >
                 {({ data: questionnaire }) => {
                     return (
-                        <QuestionnaireResponseForm
-                            questionnaire={questionnaire}
-                            resource={{ resourceType: 'QuestionnaireResponse', status: 'patient' }}
-                            onSave={async (resource) => {
-                                const response = await saveFHIRResource({
-                                    ...resource,
-                                    authored: resource.authored ? resource.authored : getFHIRCurrentDateTime(),
-                                });
-                                if (isSuccess(response)) {
-                                    notification.success({
-                                        message: 'Questionnaire response successfully saved',
+                        <>
+                            <h2>New {questionnaire.title}</h2>
+                            <QuestionnaireResponseForm
+                                questionnaire={questionnaire}
+                                resource={{ resourceType: 'QuestionnaireResponse', status: 'patient' }}
+                                onSave={async (resource) => {
+                                    const response = await saveFHIRResource({
+                                        ...resource,
+                                        authored: resource.authored ? resource.authored : getFHIRCurrentDateTime(),
                                     });
-                                } else {
-                                    notification.error({ message: 'Something went wrong' });
-                                }
-                            }}
-                        />
+                                    if (isSuccess(response)) {
+                                        notification.success({
+                                            message: 'Questionnaire response successfully saved',
+                                        });
+                                    } else {
+                                        notification.error({ message: 'Something went wrong' });
+                                    }
+                                }}
+                            />
+                        </>
                     );
                 }}
             </Resolver>
