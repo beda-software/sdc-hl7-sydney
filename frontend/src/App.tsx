@@ -1,22 +1,45 @@
 import React from 'react';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { useService } from './contrib/aidbox-react/hooks/service';
-import { getFHIRResources } from './contrib/aidbox-react/services/fhir';
-import { QuestionnaireResponseList } from './containers/QuestionnaireResponseList';
 import { BaseLayout } from './components/BaseLayout';
+import { QuestionnairesList } from './containers/QuestionnairesList';
+import { QuestionnaireForm } from './containers/QuestionnaireFrom';
 
 const App: React.FC = () => {
-
-  const user = useService(() => getFHIRResources('User', {}))
-
   return (
     <div className="App">
-      <BaseLayout>
-        <p>
-          {JSON.stringify(user)}
-        </p>
-        <QuestionnaireResponseList />
-      </BaseLayout>
+      <Router>
+        <BaseLayout>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={(props) => <QuestionnairesList {...props} />}
+            />
+            <Route
+              path="/questionnaire/new"
+              exact
+              render={(props) => <QuestionnaireForm  />}
+            />
+            <Route
+              path="/questionnaire/edit/:id"
+              exact
+              render={(props) => <QuestionnaireForm  />}
+            />
+            <Route
+              path="/questionnaire/fill/:id"
+              exact
+              render={(props) => <p>Create questionnair response form</p>}
+            />
+            <Route
+              path="/questionnaire-response/:id"
+              exact
+              render={(props) => <p>Create questionnair response form</p>}
+            />
+            <Redirect to="/" />
+          </Switch>
+        </BaseLayout>
+      </Router>
     </div>
   );
 }
