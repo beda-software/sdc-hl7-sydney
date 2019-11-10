@@ -13,6 +13,8 @@ import { notification } from 'antd';
 
 export function NewQuestionnaireResponseControl(props: any) {
     const questionnaireId: id = props.match.params.id
+    console.log(props);
+
 
     return (
         <>
@@ -42,6 +44,7 @@ export function NewQuestionnaireResponseControl(props: any) {
                                         notification.success({
                                             message: 'Questionnaire response successfully saved',
                                         });
+                                        props.history.push('/')
                                     } else {
                                         notification.error({ message: 'Something went wrong' });
                                     }

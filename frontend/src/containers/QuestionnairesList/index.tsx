@@ -15,32 +15,38 @@ export function QuestionnairesList() {
 
         return (
             <>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h2>Questionnaires</h2>
                     <Link to='/questionnaire/new'>
-                        <Button type='default'>CreateQuestionnaire</Button>
+                        <Button type='primary'>CreateQuestionnaire</Button>
                     </Link>
                 </div>
 
                 <hr />
-                <List>
-                    {questionnaires && questionnaires.length ? (
-                        _.map(questionnaires, (questionnaire) => (
-                            <List.Item key={questionnaire.id}>
+                <List<Questionnaire>
+                    dataSource={questionnaires}
+                    renderItem={(questionnaire) => (
+                        <List.Item
+                            key={questionnaire.id}
+
+                        >
+                            <List.Item.Meta title={questionnaire.title} />
+                            <div>
                                 <Link to={`/questionnaire/edit/${questionnaire.id}`}>
-                                    {questionnaire.title}{'  '}
+                                    <Button type='default' size='small'>Edit questionnaire</Button>
                                 </Link>
+                                {' '}
                                 <Link to={`/questionnaire/fill/${questionnaire.id}`}>
-                                    <Button type='primary'>Add response</Button>
+                                    <Button type='default' size='small'>Add response</Button>
                                 </Link>
                                 {' '}
                                 <Link to={`/questionnaire-response/${questionnaire.id}`}>
-                                    <Button type='primary'>View responses</Button>
+                                    <Button type='default' size='small'>View responses</Button>
                                 </Link>
-                            </List.Item>
-                        ))
-                    ) : <p>No questionnaires added</p>}
-                </ List>
+                            </div>
+                        </List.Item>
+                    )}
+                />
             </>
         );
     }
