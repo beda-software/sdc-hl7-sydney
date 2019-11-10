@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as React from 'react';
-import { Button, Form, Tabs } from 'antd';
+import { Button, Form } from 'antd';
 import { Field, Form as FinalForm, FormRenderProps } from 'react-final-form';
 
 import { InputField, ChooseField, DateTimePickerField } from '../../components/fields';
@@ -406,7 +406,6 @@ export class QuestionnaireResponseForm extends React.Component<Props, State> {
     public renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
         const { readOnly } = this.props;
         const { handleSubmit, submitting } = formParams;
-        const { activeTab } = this.state;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 2 },
@@ -417,36 +416,26 @@ export class QuestionnaireResponseForm extends React.Component<Props, State> {
                 sm: { span: 16 },
             },
         };
-        // TODO: enable validation
-        // const tabValidationState = _.map(questionnaire.item, (group) => this.isGroupValid(group, this.fromFormValues(values)));
-
         return (
-            <Tabs
-                activeKey={_.toString(activeTab)}
-                onChange={(newActiveTab) => this.setState({ activeTab: _.parseInt(newActiveTab) })}
-            >
-                {_.map(items, (group, index) => (
-                    <Tabs.TabPane tab={group.text} key={_.toString(index)}>
-                        <Form
-                            onSubmit={(event) => {
-                                event.preventDefault();
-                                handleSubmit();
-                            }}
-                            {...formItemLayout}
-                        >
-                            {this.renderQuestions(group.item!, [group.linkId, 'items'], formParams)}
-                            {!readOnly && (
-                                <div className="questionnaire-form-actions">
-                                    <Button htmlType="submit" disabled={submitting} loading={submitting}>
-                                        {activeTab === items.length - 1 ? 'Save' : 'Next'}
-                                    </Button>
-                                </div>
-                            )}
-                        </Form>
-                    </Tabs.TabPane>
-                ))}
-            </Tabs>
-        );
+            <>
+                <Form
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        handleSubmit();
+                    }}
+                    {...formItemLayout}
+                >
+                    {this.renderQuestions(items, [], formParams)}
+                    {!readOnly && (
+                        <div className="questionnaire-form-actions">
+                            <Button htmlType="submit" disabled={submitting} loading={submitting}>
+                                Save
+                            </Button>
+                        </div>
+                    )}
+                </Form>
+            </>
+        )
     };
 
     public render() {
