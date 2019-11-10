@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      annotations:
+        checksum/image: {{ .Values.image.hash }}
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{ if .Values.resources }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        {{ end }}
+        env:
+        - name: AIDBOX_CLIENT_ID
+          value: root
+        - name AIDBOX_CLIENT_SECRET
+          value: secret
+        - name: PGHOST
+          value: {{ template "aidboxdb.fullname" . }}
+        - name: PGPORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: rgv
+        - name: PGDATABASE
+          value: rgv
+        - name: PGPASSWORD
+          value: baeVeph4Ja6cheil
+        - name: AIDBOX_PORT
+          value: "{{ .Values.service.internalPort }}"
+        - name: AIDBOX_FHIR_VERSION
+          value: "4.0.0"
+        - name: OPENID_RSA
+          value: /var/config/jwtRS256.key
+        - name: OPENID_RSA_PUB
+          value: /var/config/jwtRS256.key.pub
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}

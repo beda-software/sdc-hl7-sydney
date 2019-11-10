@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      annotations:
+        checksum/image: {{ .Values.image.hash }}
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      imagePullSecrets:
+      - name: beda-software-registry-rgv
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+        env:
+          - name: APP_INIT_CLIENT_ID
+            value: root
+          - name: APP_INIT_CLIENT_SECRET
+            value: secret
+          - name: APP_INIT_URL
+            value: http://rgv-aidbox:8080
+          - name: APP_ID
+            value: rgv-app
+          - name: APP_SECRET
+            value: secret
+          - name: APP_URL
+            value: http://rgv-app:8081
+          - name: APP_PORT
+            value: '8081'
+          - name: AIO_PORT
+            value: '8081'
+          - name: AIO_HOST
+            value: 0.0.0.0

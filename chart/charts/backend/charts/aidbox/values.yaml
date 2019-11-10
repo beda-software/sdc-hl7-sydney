@@ -1,0 +1,11 @@
+replicaCount: 1
+image:
+  repository: healthsamurai/devbox
+  tag: 0.4.7
+  hash: 633006d751a6c14e09de0c13b31fa012af812196d43c1609b315934d87ecef7a 
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  externalPort: 8080
+  internalPort: 8080

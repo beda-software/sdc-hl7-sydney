@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for rgv
+name: rgv-backend
+version: 0.0.1

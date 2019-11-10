@@ -1,0 +1,16 @@
+replicaCount: 1
+backend:
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    hosts:
+      - host: rgv.beda.software
+        serviceName: rgv-frontend
+        servicePort: 3000
+      - host: api.rgv.beda.software
+        serviceName: rgv-aidbox
+
+  openid-rsa:
+    id_rsa: id_rsa
+    id_rsa.pub: id_rsa.pub
