@@ -22,12 +22,12 @@ const App: React.FC = () => {
             <Route
               path="/questionnaire/new"
               exact
-              render={(props) => <QuestionnaireForm />}
+              render={(props) => <QuestionnaireForm {...props} />}
             />
             <Route
               path="/questionnaire/edit/:id"
               exact
-              render={(props) => <QuestionnaireForm />}
+              render={(props) => <QuestionnaireForm {...props}/>}
             />
             <Route
               path="/questionnaire/fill/:id"

@@ -1,12 +1,14 @@
 import React from 'react';
+import * as ReactRouter from 'react-router';
 import { Form, Input, Button, Row, Col, Select } from 'antd';
 import { Form as FinalFrom, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays'
 import { useFieldArray } from 'react-final-form-arrays';
-// import { RemoteData } from 'src/contrib/aidbox-react/libs/remoteData';
 import { Questionnaire, QuestionnaireItem } from 'src/contrib/aidbox';
 import _ from 'lodash';
-import { saveFHIRResource } from '../../contrib/aidbox-react/services/fhir';
+import { saveFHIRResource, getFHIRResource } from '../../contrib/aidbox-react/services/fhir';
+import { useService } from '../../contrib/aidbox-react/hooks/service';
+import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
 
 async function onSubmit(data: any) {
     const questionnaire: Questionnaire = data;
@@ -23,7 +25,7 @@ interface InputFieldProps {
 }
 
 interface QuestionnaireFormProps {
-    questionnaire?: Questionnaire;
+    match: ReactRouter.match<{ id: string }>;
 }
 
 type SelectFieldProps = InputFieldProps & { options: string[] };
@@ -107,22 +109,36 @@ function Questions() {
 }
 
 export function QuestionnaireForm(props: QuestionnaireFormProps) {
+    const questionnaireId = props.match.params.id;
+    let questionnaire: Questionnaire = {resourceType: 'Questionnaire', status: 'active'};
+
+    const [response] = useService<Questionnaire>(async () => (
+        getFHIRResource({resourceType: 'Questionnaire', id: questionnaireId})
+    ));
+
+    if (isSuccess(response) && questionnaireId) {
+        questionnaire = response.data;
+    }
+    
     return (
-        <FinalFrom
-            onSubmit={onSubmit}
-            initialValues={{...props.questionnaire, resourceType: 'Questionnaire', status: 'active'}}
-            mutators={{...arrayMutators}}
-            render={({ handleSubmit, form: { mutators: { push, pop } }, values }) => {
-                return (
-                    <Form onSubmit={handleSubmit}>
-                        <InputField name="title" label="Questionnaire title"/>
-                        <Questions/>
-                        <Button type="primary" htmlType="submit">
-                            Save
-                        </Button>
-                    </Form>
-                );
-            }}
-        />
+        <>
+            <h2>{questionnaireId ? 'Edit questionnare' : 'New questionnare'}</h2>
+            <FinalFrom
+                onSubmit={onSubmit}
+                initialValues={questionnaire}
+                mutators={{...arrayMutators}}
+                render={({ handleSubmit, form: { mutators: { push, pop } }, values }) => {
+                    return (
+                        <Form onSubmit={handleSubmit}>
+                            <InputField name="title" label="Questionnaire title"/>
+                            <Questions/>
+                            <Button type="primary" htmlType="submit">
+                                Save
+                            </Button>
+                        </Form>
+                    );
+                }}
+            />
+        </>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as _ from 'lodash';
 import { Col, Row, Button, List, Spin } from 'antd';
 import { getFHIRResources, extractBundleResources } from '../../contrib/aidbox-react/services/fhir';
@@ -7,12 +7,7 @@ import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
 import { Questionnaire } from '../../contrib/aidbox';
 import { Link } from 'react-router-dom';
 
-interface Props {
-}
-
-export function QuestionnairesList(props: Props) {
-    const [showFrom, setShowFrom] = useState<boolean>(false);
-
+export function QuestionnairesList() {
     const [bundleResponse] = useService(() => getFHIRResources<Questionnaire>('Questionnaire', {}), [])
     if (isSuccess(bundleResponse)) {
         const resourcesByType = extractBundleResources(bundleResponse.data);
@@ -21,19 +16,19 @@ export function QuestionnairesList(props: Props) {
         return (
             <Row>
                 <Col span={24}>
-                    <Button type='default' onClick={() => setShowFrom(true)}>CreateQuestionnaire</Button>
+                    <Link to='/questionnaire/new'>
+                        <Button type='default'>CreateQuestionnaire</Button>
+                    </Link>
                 </Col>
-                {showFrom && (
-                    <Col>
-
-                    </Col>
-                )}
+                
                 <h2>Add new response</h2>
                 <List>
                     {questionnaires && questionnaires.length ? (
                         _.map(questionnaires, (questionnaire) => (
                             <List.Item key={questionnaire.id}>
-                                {questionnaire.title}{'  '}
+                                <Link to={`/questionnaire/edit/${questionnaire.id}` }>
+                                    {questionnaire.title}{'  '}
+                                </Link>
                                 <Link to={`/questionnaire/fill/${questionnaire.id}`}>
                                     <Button type='primary'>Add response</Button>
                                 </Link>
