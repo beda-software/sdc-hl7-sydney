@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Col, Row, Button } from 'antd';
 
 interface Props {
-    id: string;
 }
 
 export function QuestionnairesList(props: Props) {

@@ -15,7 +15,9 @@ export function BaseLayout(props: any) {
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
                     >
-                        <Menu.Item key='home'>Home</Menu.Item>
+                        <Menu.Item key='home'>RGV HIE Hackathon</Menu.Item>
+                        <Menu.Item key='home'>Beda.Software</Menu.Item>
+                        <Menu.Item key='home'>Health Samurai</Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
