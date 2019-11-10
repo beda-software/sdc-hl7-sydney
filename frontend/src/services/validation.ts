@@ -5,7 +5,7 @@ import ajvErrors from "ajv-errors";
 import ajvKeywords from "ajv-keywords";
 import * as _ from "lodash";
 
-import { getByPath, setByPath } from "src/utils/path";
+import { getByPath, setByPath } from "../../src/utils/path";
 
 const ajvInstance = new Ajv({
   allErrors: true,

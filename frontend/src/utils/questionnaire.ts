@@ -11,7 +11,7 @@ import {
   QuestionnaireResponseItemAnswer
 } from "src/contrib/aidbox";
 
-import { getByPath, setByPath } from "src/utils/path";
+import { getByPath, setByPath } from "../utils/path";
 
 // TODO: Write own type
 type AnswerValue = Required<QuestionnaireResponseItemAnswer>["value"] &

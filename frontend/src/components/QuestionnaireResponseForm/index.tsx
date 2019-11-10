@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Button, Form, Tabs } from 'antd';
 import { Field, Form as FinalForm, FormRenderProps } from 'react-final-form';
 
-import { InputField, ChooseField, DateTimePickerField } from 'src/components/fields';
-import { Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem } from 'src/contrib/aidbox';
+import { InputField, ChooseField, DateTimePickerField } from '../../components/fields';
+import { Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem } from '../../contrib/aidbox';
 import {
     FormAnswerItems,
     FormItems,
@@ -14,8 +14,8 @@ import {
     isValueEqual,
     mapFormToResponse,
     mapResponseToForm,
-} from 'src/utils/questionnaire';
-import { makeValidator } from 'src/services/validation';
+} from '../../utils/questionnaire';
+import { makeValidator } from '../../services/validation';
 
 interface Props {
     resource: QuestionnaireResponse;

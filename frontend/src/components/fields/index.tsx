@@ -19,11 +19,8 @@ import {
     humanDateTime,
     parseFHIRDate,
     parseFHIRDateTime,
-} from 'src/utils/date';
+} from '../../utils/date';
 import { DatePickerProps } from 'antd/lib/date-picker/interface';
-// @ts-ignore;
-import ReactPhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/dist/style.css';
 
 
 export function getFormItemProps(meta: any): Pick<FormItemProps, 'validateStatus' | 'help'> {
@@ -256,36 +253,6 @@ export function DateTimePickerField({
                                     ? input.onChange(showTime ? formatFHIRDateTime(date) : formatFHIRDate(date))
                                     : input.onChange(null)
                             }
-                        />
-                    </Form.Item>
-                );
-            }}
-        </Field>
-    );
-}
-
-interface PhoneInputFieldProps {
-    onlyCountries?: string[];
-}
-
-export function PhoneInputField({
-    fieldProps,
-    formItemProps,
-    name,
-    label,
-    helpText,
-    onlyCountries,
-}: PhoneInputFieldProps & FieldProps) {
-    return (
-        <Field name={name} {...fieldProps}>
-            {({ input, meta }) => {
-                return (
-                    <Form.Item {...formItemProps} label={label} extra={helpText} {...getFormItemProps(meta)}>
-                        <ReactPhoneInput
-                            defaultCountry="us"
-                            {...input}
-                            onlyCountries={onlyCountries}
-                            style={{ width: '10px' }}
                         />
                     </Form.Item>
                 );

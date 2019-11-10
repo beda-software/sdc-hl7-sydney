@@ -17,7 +17,6 @@ export function QuestionnairesList(props: Props) {
     if (isSuccess(bundleResponse)) {
         const resourcesByType = extractBundleResources(bundleResponse.data);
         const questionnaires = resourcesByType.Questionnaire
-        console.log(questionnaires)
 
         return (
             <Row>

@@ -1,43 +1,55 @@
 import React from 'react'
-// import { saveFHIRResource } from '../../contrib/aidbox-react/services/fhir'
-// import { isSuccess } from 'src/contrib/aidbox-react/libs/remoteData'
-// import { getFHIRCurrentDateTime } from 'src/utils/date'
-// import { notification } from 'antd'
-// import { QuestionnaireResponseForm } from 'src/components/QuestionnaireResponseForm'
+import { getFHIRResource, makeReference, saveFHIRResource } from '../../contrib/aidbox-react/services/fhir';
+import { Questionnaire, id } from '../../contrib/aidbox';
+import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
+import { Resolver } from '../../components/ResolverNew'
+import { QuestionnaireResponseForm } from '../../components/QuestionnaireResponseForm';
+import { getFHIRCurrentDateTime } from '../../utils/date';
+import { notification } from 'antd';
 
-interface Props {
-    questionnaire: any // Questionnaire
-}
+// interface Props {
 
-export function NewQuestionnaireResponseControl(props: Props) {
-    const { questionnaire } = props
+// }
 
-    // const [visible, setVisible] = React.useState<boolean>(false);
+export function NewQuestionnaireResponseControl(props: any) {
+    const questionnaireId: id = props.match.params.id
 
     return (
         <>
-            <p key={questionnaire.id}>
-                {questionnaire.title}
-            </p>
+            <p>123</p>
+            <pre>{JSON.stringify(questionnaireId, undefined, 2)}</pre>
+            <Resolver
+                resolve={() =>
+                    getFHIRResource<Questionnaire>(
+                        makeReference(
+                            'Questionnaire',
+                            questionnaireId
+                        )
+                    )
+                }
+            >
+                {({ data: questionnaire }) => {
+                    return (
+                        <QuestionnaireResponseForm
+                            questionnaire={questionnaire}
+                            resource={{ resourceType: 'QuestionnaireResponse', status: 'patient' }}
+                            onSave={async (resource) => {
+                                const response = await saveFHIRResource({
+                                    ...resource,
+                                    authored: resource.authored ? resource.authored : getFHIRCurrentDateTime(),
+                                });
+                                if (isSuccess(response)) {
+                                    notification.success({
+                                        message: 'Questionnaire response successfully saved',
+                                    });
+                                } else {
+                                    notification.error({ message: 'Something went wrong' });
+                                }
+                            }}
+                        />
+                    );
+                }}
+            </Resolver>
         </>
-        // <QuestionnaireResponseForm
-        //     questionnaire={questionnaire}
-        //     resource={questionnaireResponseModal.questionnaireResponse!}
-        //     onSave={async (resource) => {
-        //         const response = await saveFHIRResource({
-        //             ...resource,
-        //             authored: resource.authored ? resource.authored : getFHIRCurrentDateTime(),
-        //         });
-        //         if (isSuccess(response)) {
-        //             notification.success({
-        //                 message: 'Questionnaire response successfully saved',
-        //             });
-
-        //             reload();
-        //         } else {
-        //             notification.error({ message: 'Something went wrong' });
-        //         }
-        //     }}
-        // />
     )
 }
