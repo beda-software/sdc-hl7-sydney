@@ -5,7 +5,7 @@ import { getFHIRResources, extractBundleResources } from '../../contrib/aidbox-r
 import { useService } from '../../contrib/aidbox-react/hooks/service';
 import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
 import { Questionnaire } from '../../contrib/aidbox';
-import { NewQuestionnaireResponseControl } from '../NewQuestionnaireResponseControl';
+import { Link } from 'react-router-dom';
 
 interface Props {
 }
@@ -32,7 +32,15 @@ export function QuestionnairesList(props: Props) {
                 <h2>Add new response</h2>
                 <List>
                     {questionnaires && questionnaires.length ? (
-                        _.map(questionnaires, (questionnaire) => <List.Item key={questionnaire.id}><NewQuestionnaireResponseControl questionnaire={questionnaire} /></List.Item>)
+                        _.map(questionnaires, (questionnaire) => (
+                            <List.Item key={questionnaire.id}>
+                                {questionnaire.title}{'  '}
+                                <Link to={`/questionnaire/fill/${questionnaire.id}`}>
+                                    <Button type='primary'>Add response</Button>
+                                </Link>
+
+                            </List.Item>
+                        ))
                     ) : <p>No questionnaires added</p>}
                 </ List>
             </Row>
