@@ -8,7 +8,7 @@ export function BaseLayout(props: any) {
 
     return (
         <>
-            <Layout className="layout">
+            <Layout className="layout" style={{ textAlign: 'left' }}>
                 <Header>
                     <Menu
                         theme="dark"
