@@ -104,6 +104,12 @@ async def sync_questionnaire(questionnarie):
                 "where": """(knife_extract(resource, '[["item",{{"linkId": "{}"}}, "answer", "value", "string"]]'))[1]::text ilike {{{{params.{}}}}} """.format(
                     item["linkId"], item["linkId"])
             }
+        elif item['type'] == 'integer':
+            search_query["params"][item["linkId"]] = {
+                "type": "integer",
+                "where": """(knife_extract(resource, '[["item",{{"linkId": "{}"}}, "answer", "value", "integer"]]'))[1]::integer = {{{{params.{}}}}} """.format(
+                    item["linkId"], item["linkId"])
+            }
 
     await search_query.save()
 
