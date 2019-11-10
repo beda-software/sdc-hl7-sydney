@@ -95,11 +95,6 @@ function QuestionnaireResponseTable({ questionnaire }: QuestionnaireResponseTabl
         filterIcon: (filtered:any) => (
           <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value:any, record:any) =>
-          record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible:boolean) => {
           if (visible) {
             setTimeout(() => searchInput.current!.select());
@@ -111,21 +106,31 @@ function QuestionnaireResponseTable({ questionnaire }: QuestionnaireResponseTabl
 
     const columns = _.map(questionnaire.item, (item) => {
         questionTypes[item.linkId] = item.type;
-        return {
+        let column = {
             title: item.text,
             dataIndex: item.linkId,
             key: item.linkId,
-            ...getColumnSearchProps(item.linkId),
-        };
+        }
+        if(item.type === "string" || item.type === "integer") {
+            column = {
+                ...column,
+                ...getColumnSearchProps(item.linkId)
+            }
+        }
+        return column;
     });
 
 
     if (isSuccess(questionnaireResponse)) {
-        const dataSource = _.map(questionnaireResponse.data.entry, ({ resource }: {resource: QuestionnaireResponse}) => {
+        const dataSource = _.map(questionnaireResponse.data.entry, ({ resource }: { resource: QuestionnaireResponse }) => {
             const data = { key: resource.id, };
             _.each(resource.item, (item) => {
-                console.log(item.answer, questionTypes[item.linkId])
-                data[item.linkId] = item.answer![0].value![questionTypes[item.linkId]];
+                const type = questionTypes[item.linkId];
+                if (type === 'choice') {
+                    data[item.linkId] = item.answer![0].value!.Coding!.display!;
+                } else {
+                    data[item.linkId] = item.answer![0].value![type];
+                }
             });
             return data;
         });
