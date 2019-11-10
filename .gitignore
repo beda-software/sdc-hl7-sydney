@@ -1,0 +1,11 @@
+*.DS_Store
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.env-*
+.idea
+pgdata
+config
+kubernetes-init-scripts/jwtRS256.key.pub
+kubernetes-init-scripts/jwtRS256.key
