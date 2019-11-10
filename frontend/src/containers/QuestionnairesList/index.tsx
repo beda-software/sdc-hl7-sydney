@@ -37,7 +37,10 @@ export function QuestionnairesList(props: Props) {
                                 <Link to={`/questionnaire/fill/${questionnaire.id}`}>
                                     <Button type='primary'>Add response</Button>
                                 </Link>
-
+                                {' '}
+                                <Link to={`/questionnaire-response/${questionnaire.id}`}>
+                                    <Button type='primary'>View responses</Button>
+                                </Link>
                             </List.Item>
                         ))
                     ) : <p>No questionnaires added</p>}
