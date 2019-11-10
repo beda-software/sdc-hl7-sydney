@@ -33,7 +33,7 @@ spec:
           - name: APP_SECRET
             value: secret
           - name: APP_URL
-            value: http://rgv-app:8081
+            value: http://rgv-rgv-backend:8081
           - name: APP_PORT
             value: '8081'
           - name: AIO_PORT

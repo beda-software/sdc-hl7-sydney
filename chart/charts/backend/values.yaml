@@ -9,3 +9,15 @@ service:
   type: ClusterIP
   externalPort: 8081
   internalPort: 8081
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+  hosts:
+    - host: rgv.beda.software
+      serviceName: rgv-rgv-web-iu
+      servicePort: 3000
+    - host: api.rgv.beda.software
+      serviceName: rgv-aidbox
+      servicePort: 8080

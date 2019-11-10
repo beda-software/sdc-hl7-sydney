@@ -24,7 +24,7 @@ spec:
         env:
         - name: AIDBOX_CLIENT_ID
           value: root
-        - name AIDBOX_CLIENT_SECRET
+        - name: AIDBOX_CLIENT_SECRET
           value: secret
         - name: PGHOST
           value: {{ template "aidboxdb.fullname" . }}
@@ -34,6 +34,8 @@ spec:
           value: rgv
         - name: PGDATABASE
           value: rgv
+        - name: PGUSER
+          value: postgres
         - name: PGPASSWORD
           value: baeVeph4Ja6cheil
         - name: AIDBOX_PORT
@@ -44,5 +46,9 @@ spec:
           value: /var/config/jwtRS256.key
         - name: OPENID_RSA_PUB
           value: /var/config/jwtRS256.key.pub
+        - name: AIDBOX_LICENSE_ID
+          value: 08859c9484b2456
+        - name: AIDBOX_LICENSE_KEY
+          value: d17f313de665472caeea97c428032f0a
         ports:
         - containerPort: {{ .Values.service.internalPort }}
