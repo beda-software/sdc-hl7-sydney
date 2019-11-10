@@ -59,3 +59,52 @@ sdk = SDK(settings, resources=resources)
 
 async def create_app():
     return await _create_app(settings, sdk, debug=True)
+
+
+@sdk.operation(["GET"], ["sync-questionnaire", {"name": "id"}], public=False)
+async def sync_questionnaire_operation(operation, request):
+    await sync_questionnaire(
+        await sdk.client.resources('Questionnaire').get(
+            id=request["route-params"]["id"]))
+    return web.json_response({})
+
+@sdk.subscription("Questionnaire")
+async def sync_questionnaire_subscription(event):
+    await sync_questionnaire(
+        sdk.client.resource("Questionnaire",
+                            **event["resource"]))
+
+
+async def sync_questionnaire(questionnarie):
+    logging.debug("Sync questionnaire %s", questionnarie)
+
+    search_query = sdk.client.resource("SearchQuery", **{
+        "id": questionnarie["id"],
+        "resource": {
+            "id": "QuestionnaireResponse",
+            "resourceType": "Entity",
+        },
+        "as": "qr",
+        "total": True,
+        "query": {
+            "where": "qr.resource->>'questionnaire' = '{}'".format(
+                questionnarie['id'])
+
+        },
+        "params": {
+        },
+    })
+
+    for item in questionnarie['item']:
+        logging.debug(item['linkId'])
+        if item['type'] == 'string':
+            search_query["params"][item["linkId"]] = {
+                "type": "string",
+                "format": '%?%',
+                "where": """(knife_extract(resource, '[["item",{{"linkId": "{}"}}, "answer", "value", "string"]]'))[1]::text ilike {{{{params.{}}}}} """.format(
+                    item["linkId"], item["linkId"])
+            }
+
+    await search_query.save()
+
+    logging.debug("SearchQuery %s", search_query)
