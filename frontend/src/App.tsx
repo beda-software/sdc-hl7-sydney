@@ -4,6 +4,7 @@ import './App.css';
 import { BaseLayout } from './components/BaseLayout';
 import { QuestionnairesList } from './containers/QuestionnairesList';
 import { QuestionnaireForm } from './containers/QuestionnaireFrom';
+import { QuestionnairesResponseView } from './containers/QuestionnaireResponseVIew';
 
 const App: React.FC = () => {
 
@@ -35,7 +36,7 @@ const App: React.FC = () => {
             <Route
               path="/questionnaire-response/:id"
               exact
-              render={(props) => <p>Create questionnair response form</p>}
+              render={(props) => <QuestionnairesResponseView {...props} />}
             />
             <Redirect to="/" />
           </Switch>
