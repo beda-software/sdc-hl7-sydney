@@ -11,7 +11,11 @@ axiosInstance.defaults.auth = {
     password: 'secret',
 }
 
-axiosInstance.defaults.baseURL = 'http://localhost:8080'
+if (window.location.origin === 'http://rgv.beda.software/') {
+    axiosInstance.defaults.baseURL = 'http://api.rgv.beda.software/';
+} else {
+    axiosInstance.defaults.baseURL = 'http://localhost:8080';
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
