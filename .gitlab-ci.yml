@@ -14,7 +14,7 @@ variables:
 build-frontend:
   stage: build
   script:
-    - docker build -t $BUILD_IMAGE frontend
+    - docker build -t $FRONTEND_BUILD_IMAGE frontend
 
 release-frontend:
   stage: release
@@ -31,7 +31,7 @@ release-frontend:
 build-backend:
   stage: build
   script:
-    - docker build -t $BUILD_IMAGE backend
+    - docker build -t $BACKEND_BUILD_IMAGE backend
 
 release-backend:
   stage: release
