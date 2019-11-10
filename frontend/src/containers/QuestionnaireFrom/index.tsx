@@ -16,7 +16,11 @@ async function onSubmit(data: any) {
         item.linkId = _.replace(item.text!, /\s+/g, '-')
     })
 
-    return await saveFHIRResource(questionnaire)
+    const result = await saveFHIRResource(questionnaire)
+
+    if (isSuccess(result)) {
+        window.location.replace('/');
+    }
 }
 
 interface InputFieldProps {
