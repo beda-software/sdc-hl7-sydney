@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { QuestionnaireResponseList } from './containers/QuestionnaireResponseList';
 import { BaseLayout } from './components/BaseLayout';
 import { QuestionnairesList } from './containers/QuestionnairesList';
 import { QuestionnaireForm } from './containers/QuestionnaireFrom';
@@ -16,7 +15,7 @@ const App: React.FC = () => {
             <Route
               path="/"
               exact
-              render={(props) => <QuestionnairesList {...props} />}
+              render={(props) => <QuestionnairesList />}
             />
             <Route
               path="/questionnaire/new"
