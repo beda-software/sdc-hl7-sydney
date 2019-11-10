@@ -22,6 +22,8 @@ spec:
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         env:
+          - name: APP_OVERRIDE_AIDBOX_BASE_URL
+            value: http://rgv-aidbox:8080
           - name: APP_INIT_CLIENT_ID
             value: root
           - name: APP_INIT_CLIENT_SECRET
