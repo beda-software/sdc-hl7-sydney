@@ -1,5 +1,6 @@
 import React from 'react'
 import { Layout, Menu } from 'antd'
+import { Link } from 'react-router-dom';
 const { Header, Content } = Layout;
 
 
@@ -15,9 +16,9 @@ export function BaseLayout(props: any) {
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
                     >
-                        <Menu.Item key='home'>RGV HIE Hackathon</Menu.Item>
-                        <Menu.Item key='home'>Beda.Software</Menu.Item>
-                        <Menu.Item key='home'>Health Samurai</Menu.Item>
+                            <Menu.Item key='home'><Link to='/'>RGV HIE Hackathon</Link></Menu.Item>
+                            <Menu.Item key='beda'><Link to='/'>Beda.Software</Link></Menu.Item>
+                            <Menu.Item key='samurai'><Link to='/'>Health Samurai</Link></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
