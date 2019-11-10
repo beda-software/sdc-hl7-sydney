@@ -67,11 +67,12 @@ function QuestionnaireResponseTable({ questionnaire }: QuestionnaireResponseTabl
         setParams(_.omit(params, [linkId]))
     }
 
-    const getColumnSearchProps = (dataIndex: string) => ({
+    const getColumnSearchProps = (dataIndex: string, type: string) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
             <div style={{ padding: 8 }}>
                 <Input
                     ref={searchInput}
+                    type={type === 'integer' ? 'number' : 'string'}
                     placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
@@ -114,7 +115,7 @@ function QuestionnaireResponseTable({ questionnaire }: QuestionnaireResponseTabl
         if (item.type === "string" || item.type === "integer") {
             column = {
                 ...column,
-                ...getColumnSearchProps(item.linkId)
+                ...getColumnSearchProps(item.linkId, item.type)
             }
         }
         return column;
