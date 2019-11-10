@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { axiosInstance } from './contrib/aidbox-react/services/instance';
+
+
+axiosInstance.defaults.auth = {
+    username: 'root',
+    password: 'secret',
+}
+
+axiosInstance.defaults.baseURL = 'http://localhost:8080'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

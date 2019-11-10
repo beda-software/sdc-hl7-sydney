@@ -41,6 +41,17 @@ resources = {
                     }
                 }
         },
+    "SearchParameter": {
+        "User.active": {
+            "name": "active",
+            "expression": [["active"]],
+            "type": "token",
+            "resource": {
+                "resourceType": "Entity",
+                "id": "User"
+            }
+        },
+    }
 }
 
 sdk = SDK(settings, resources=resources)
