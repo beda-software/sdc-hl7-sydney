@@ -9,6 +9,8 @@ variables:
   FRONTEND_BUILD_IMAGE: rgv-frontend:$CI_BUILD_REF
   BACKEND_CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_BUILD_REF_NAME
   BACKEND_BUILD_IMAGE: rgv-backend:$CI_BUILD_REF
+  FHIRPATH_CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_BUILD_REF_NAME
+  FHIRPATH_BUILD_IMAGE: rgv-fhirpath:$CI_BUILD_REF
 
 
 build-frontend:
@@ -25,6 +27,23 @@ release-frontend:
     - docker tag $FRONTEND_BUILD_IMAGE $FRONTEND_CONTAINER_RELEASE_IMAGE
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker push $FRONTEND_CONTAINER_RELEASE_IMAGE
+  only:
+    - master
+
+build-fhirpath:
+  stage: build
+  script:
+    - docker build -t $FHIRPATH_BUILD_IMAGE fhirpath
+
+release-fhirpath:
+  stage: release
+  before_script:
+    - git submodule sync --recursive
+    - git submodule update --init --recursive
+  script:
+    - docker tag $FHIRPATH_BUILD_IMAGE $FHIRPATH_CONTAINER_RELEASE_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $FHIRPATH_CONTAINER_RELEASE_IMAGE
   only:
     - master
 

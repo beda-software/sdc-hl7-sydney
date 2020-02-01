@@ -1,0 +1,15 @@
+{
+  "name": "fhirpath-server",
+  "version": "1.0.0",
+  "description": "fhirpath server ",
+  "author": "Ilya Beda",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.16.1",
+    "fhirpath": "^1.0.1"
+  }
+}

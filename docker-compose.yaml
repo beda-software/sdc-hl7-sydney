@@ -3,6 +3,12 @@ volumes:
   chat-data:
 
 services:
+  fhirpath:
+    build: ./fhirpath
+    volumes:
+      - ./fhirpath:/usr/src/app
+    ports:
+      - "8081:8080"
   backend:
     build: ./backend
     command: ["wait-for-it.sh", "devbox:8080", "--strict", "--timeout=0", "--", "adev", "runserver"]
