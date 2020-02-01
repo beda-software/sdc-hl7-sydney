@@ -54,6 +54,7 @@ export interface AidboxQuery<T> {
 export interface AidboxResource {
     resourceType: string;
     id?: string;
+    meta?: any;
 }
 
 export interface AidboxReference<R extends AidboxResource> {
