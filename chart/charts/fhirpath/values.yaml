@@ -1,0 +1,11 @@
+replicaCount: 1
+image:
+  repository: registry.bro.engineering/rgv-hie-hackathon/environment/fhirpath
+  tag: master
+  hash: initial-hash-5
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  externalPort: 3000
+  internalPort: 5000
