@@ -172,31 +172,35 @@ async def sync_questionnaire(questionnarie):
     logging.debug("SearchQuery %s", search_query)
 
 
-async def handle_item(item, env):
+async def handle_item(item, env, fhir_format):
     root = {"linkId": item["linkId"], "text": item["text"]}
     if 'initialExpression' in item:
-        async with aiohttp.ClientSession() as session:
-            resp = await session.post('http://fhirpath.hl7.beda.software/',
-                                      json={
-                                          "data": {},
-                                          "expr": item['initialExpression']['expression'],
-                                          "env": env,
-                                      })
-            data = (await resp.json())['data']
-            if len(data):
-                root["answer"] = [{"value": {"string": data[0]}}]
+        try:
+            async with aiohttp.ClientSession() as session:
+                resp = await session.post('http://fhirpath.hl7.beda.software/',
+                                        json={
+                                            "data": {},
+                                            "expr": item['initialExpression']['expression'],
+                                            "env": env,
+                                        })
+                if resp.status == 200:
+                    data = (await resp.json())['data']
+                    if len(data):
+                        if fhir_format:
+                            root["answer"] = [{"valueString": data[0]}]
+                        else:
+                            root["answer"] = [{"value": {"string": data[0]}}]
+        except aiohttp.web.HTTPException:
+            pass
     if 'item' in item:
         root["item"] = []
         for i in item['item']:
-            root["item"].append(await handle_item(i, env))
+            root["item"].append(await handle_item(i, env, fhir_format))
 
     return root
 
 
-@sdk.operation(["POST"],
-               ["Questionnaire", {"name": "id"}, "$populate"],
-               public=True)
-async def populate_questionnaire(operation, request):
+async def populate_questionnaire(request, fhir_format=False):
     env = {}
     for param in request['resource']['parameter']:
         if 'resource' in param:
@@ -206,11 +210,22 @@ async def populate_questionnaire(operation, request):
         id=request["route-params"]["id"])
     root = {
         "resourceType": "QuestionnaireResponse",
-        "questionnaire": "Questionnaire/{}".format(request["route-params"]["id"]),
-        "status": "in-progress",
         "item": []
     }
     for item in questionnaire['item']:
-        root['item'].append(await handle_item(item, env))
+        root['item'].append(await handle_item(item, env, fhir_format))
 
     return web.json_response(root)
+
+@sdk.operation(["POST"],
+               ["fhir", "Questionnaire", {"name": "id"}, "$populate"],
+               public=True)
+async def populate_questionnaire_fhir(operation, request):
+    return await populate_questionnaire(request, True)
+
+@sdk.operation(["POST"],
+               ["Questionnaire", {"name": "id"}, "$populate"],
+               public=True)
+async def populate_questionnaire_aidbox(operation, request):
+    return await populate_questionnaire(request, False)
+
