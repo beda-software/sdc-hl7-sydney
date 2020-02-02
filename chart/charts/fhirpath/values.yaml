@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: registry.bro.engineering/rgv-hie-hackathon/environment/fhirpath
   tag: master
-  hash: initial-hash-7
+  hash: initial-hash-8
   pullPolicy: Always
 
 service:

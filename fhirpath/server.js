@@ -24,7 +24,7 @@ app.post('/', (req, res) => {
     const env = body.env;
     // console.log(body, data, expr);
     res.setHeader('content-type', 'application/json');
-    res.send(fhirpath.evaluate(data, expr, env, fhirpath_r4_model));
+    res.send({data: fhirpath.evaluate(data, expr, env, fhirpath_r4_model)});
 });
 
 

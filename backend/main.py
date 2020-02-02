@@ -173,19 +173,24 @@ async def sync_questionnaire(questionnarie):
 
 
 async def handle_item(item, env):
+    root = {"linkId": item["linkId"], "text": item["text"]}
     if 'initialExpression' in item:
         async with aiohttp.ClientSession() as session:
-             resp = await session.post('http://fhirpath.hl7.beda.software/',
-                                       json={
-                                           "data": {},
-                                           "expr": item['initialExpression']['expression'],
-                                           "env": env,
-                                       })
-             data = await resp.text()
-             logging.debug(data)
+            resp = await session.post('http://fhirpath.hl7.beda.software/',
+                                      json={
+                                          "data": {},
+                                          "expr": item['initialExpression']['expression'],
+                                          "env": env,
+                                      })
+            data = await resp.json()
+            value = data['data'][0]
+            root["answer"] = [{"valueString": value}]
     if 'item' in item:
+        root["item"] = []
         for i in item['item']:
-            await handle_item(i, env)
+            root["item"].append(await handle_item(i, env))
+
+    return root
 
 
 @sdk.operation(["POST"],
@@ -199,6 +204,13 @@ async def populate_questionnaire(operation, request):
 
     questionnaire = await sdk.client.resources('Questionnaire').get(
         id=request["route-params"]["id"])
+    root = {
+        "resourceType": "QuestionnaireResponse",
+        "questionnaire": "Questionnaire/{}".format(request["route-params"]["id"]),
+        "status": "in-progress",
+        "item": []
+    }
     for item in questionnaire['item']:
-        await handle_item(item, env)
-    return web.json_response({})
+        root['item'].append(await handle_item(item, env))
+
+    return web.json_response(root)
