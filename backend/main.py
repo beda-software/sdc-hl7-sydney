@@ -169,3 +169,22 @@ async def sync_questionnaire(questionnarie):
     await search_query.save()
 
     logging.debug("SearchQuery %s", search_query)
+
+
+def handle_item(item):
+    if 'initialExpression' in item:
+        logging.debug(item['initialExpression'])
+    if 'item' in item:
+        for i in item['item']:
+            handle_item(i)
+
+
+@sdk.operation(["POST"],
+               ["fhir", "Questionnaire", {"name": "id"}, "$populate"],
+               public=True)
+async def populate_questionnaire(operation, request):
+    questionnaire = await sdk.client.resources('Questionnaire').get(
+        id=request["route-params"]["id"])
+    for item in questionnaire['item']:
+        handle_item(item)
+    return web.json_response({})

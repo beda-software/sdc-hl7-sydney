@@ -21,8 +21,9 @@ app.post('/', (req, res) => {
     const body = req.body;
     const data = body.data;
     const expr = body.expr;
+    const env = body.env;
     // console.log(body, data, expr);
-    res.send(fhirpath.evaluate(data, expr, null, fhirpath_r4_model));
+    res.send(fhirpath.evaluate(data, expr, env, fhirpath_r4_model));
 });
 
 
