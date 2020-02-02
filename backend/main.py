@@ -31,16 +31,32 @@ resources = {
                     'password': '12345678',
                 }
         },
-    'AccessPolicy':
-        {
-            'superadmin':
-                {
-                    'engine': 'json-schema',
-                    'schema': {
-                        'required': ['user']
+    'AccessPolicy': {
+        'superadmin': {
+            'engine': 'json-schema',
+            'schema': {
+                'required': ['user']
+            }
+        },
+        'questionnaire-public': {
+            'engine': 'json-schema',
+            'schema': {
+                "properties": {
+                    "params": {
+                        "required": [
+                            "resource/type",
+                            "resource/id",
+                        ],
+                        "properties": {
+                            "resource/type": {
+                                "constant": "Questionnaire",
+                            },
+                        }
                     }
                 }
+            }
         },
+    },
     "SearchParameter": {
         "User.active": {
             "name": "active",
