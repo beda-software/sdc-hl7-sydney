@@ -54,7 +54,7 @@ function SelectField({ name, label, options }: SelectFieldProps) {
 }
 
 function Questions() {
-  const { fields } = useFieldArray<QuestionnaireItem>('item');
+  const { fields } = useFieldArray<QuestionnaireItem>('item.0.item');
 
   return (
     <Form.Item
@@ -113,6 +113,11 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
   let questionnaire: Questionnaire = {
     resourceType: 'Questionnaire',
     status: 'active',
+    item: [{
+      linkId: 'group', 
+      text: "Questions", 
+      type: 'group',
+    }],
     launchContext: {
       name: "LaunchPatient",
       type: "Patient",
@@ -130,7 +135,7 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
 
   async function onSubmit(data: any) {
     const questionnaire: Questionnaire = data;
-    _.each(questionnaire.item, (item) => {
+    _.each(questionnaire.item![0].item!, (item) => {
       item.linkId = _.replace(item.text!, /\s+/g, '-');
       if(item.initialExpression && item.initialExpression.expression && item.initialExpression.expression !== "") {
         item.initialExpression.language = 'text/fhirpath';
@@ -166,7 +171,7 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
               <Questions />
               <Button type="primary" htmlType="submit">
                 Save
-                            </Button>
+              </Button>
             </Form>
           );
         }}
