@@ -12,7 +12,7 @@ axiosInstance.defaults.auth = {
 }
 
 if (window.location.origin === 'http://rgv.beda.software' || window.location.origin === 'http://ui.hl7.beda.software') {
-    axiosInstance.defaults.baseURL = 'http://api.rgv.beda.software';
+    axiosInstance.defaults.baseURL = 'http://api.hl7.beda.software';
 } else {
     axiosInstance.defaults.baseURL = 'http://localhost:8080';
 }
