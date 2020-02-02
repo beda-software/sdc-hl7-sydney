@@ -17,8 +17,9 @@ export function BaseLayout(props: any) {
                         style={{ lineHeight: '64px' }}
                     >
                         <Menu.Item key='home'><Link to='/'>HL7 SDC Connectathon</Link></Menu.Item>
-                        <Menu.Item key='beda'><a target="_blank" href='http://beda.software'>Build by Beda.Software</a></Menu.Item>
+                        <Menu.Item key='beda'><a target="_blank" href='http://beda.software'>Built by Beda.Software</a></Menu.Item>
                         <Menu.Item key='samurai'><a target="_blank" href='https://www.health-samurai.io/aidbox'>on top of AidBox</a></Menu.Item>
+                        <Menu.Item key='github'><a target="_blank" href="https://github.com/beda-software/sdc-hl7-sydney">Source code</a></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
