@@ -57,6 +57,27 @@ resources = {
                 }
             }
         },
+        'patient-public': {
+            'engine': 'json-schema',
+            'schema': {
+                "properties": {
+                    "params": {
+                        "required": [
+                            "resource/type",
+                            "resource/id",
+                        ],
+                        "properties": {
+                            "resource/type": {
+                                "constant": "Patient",
+                            },
+                            "resource/id": {
+                                "constant": "example",
+                            },
+                        }
+                    }
+                }
+            }
+        },
     },
     "SearchParameter": {
         "User.active": {

@@ -108,6 +108,15 @@ function Questions() {
   );
 }
 
+const extensinSample = `
+extension:
+- url: http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext
+  extension:
+  - {url: name, valueId: LaunchPatient}
+  - {url: type, valueCode: Patient}
+  - {url: description, valueString: The patient that is to be used to pre-populate the form}
+  `
+
 export function QuestionnaireForm(props: QuestionnaireFormProps) {
   const questionnaireId = props.match.params.id;
   let questionnaire: Questionnaire = {
@@ -159,6 +168,14 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
 
   return (
     <>
+      <p>Questionnaire will have sdc-questionnaire-launchContext extension that bind patinet</p>
+      <pre>
+      {extensinSample}
+      </pre>
+      <p><a href="http://api.hl7.beda.software/Patient/example">Link</a> to the example patient</p>
+      <p>You can provide FHIRPath expression per field to enable field population</p>
+      <p>Example to populate given name</p>
+      <pre>%LaunchPatient.name.where(use='usual').given.first()</pre>
       <h2>{questionnaireId ? 'Edit questionnare' : 'New questionnare'}</h2>
       <FinalFrom
         onSubmit={onSubmit}

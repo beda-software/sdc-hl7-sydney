@@ -40,10 +40,10 @@ export function QuestionnairesList() {
                                     <Link to={`/questionnaire/fill/${questionnaire.id}`}>
                                         <Button type='default' size='small'>Add response</Button>
                                     </Link>
-                                    {' '}
+                                    {/* {' '}
                                     <Link to={`/questionnaire-response/${questionnaire.id}`}>
                                         <Button type='default' size='small'>View responses</Button>
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             </List.Item>
                         )}
