@@ -18,6 +18,9 @@ ingress:
     - host: hl7.beda.software
       serviceName: rgv-rgv-web-iu
       servicePort: 3000
+    - host: ui.hl7.beda.software
+      serviceName: rgv-rgv-web-iu
+      servicePort: 3000
     - host: api.hl7.beda.software
       serviceName: rgv-aidbox
       servicePort: 8080
