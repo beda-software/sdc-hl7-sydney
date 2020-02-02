@@ -7,6 +7,7 @@ import { Resolver } from '../../components/ResolverNew'
 import { QuestionnaireResponseForm } from '../../components/QuestionnaireResponseForm';
 import { getFHIRCurrentDateTime } from '../../utils/date';
 import { notification } from 'antd';
+import _ from 'lodash';
 
 interface Data {
     questionnaire: Questionnaire,
@@ -61,13 +62,20 @@ export function NewQuestionnaireResponseControl(props: any) {
             >
                 {({ data }) => {
                     const { questionnaire, questionnaireResponse } = data;
-                    console.log(questionnaireResponse);
+                    const resource:QuestionnaireResponse = _.merge(
+                        {},
+                        { 
+                            resourceType: 'QuestionnaireResponse', 
+                            status: 'patient',
+                            questionnaire: questionnaireId,
+                        },
+                        questionnaireResponse);
                     return (
                         <>
                             <h2>New {questionnaire.title}</h2>
                             <QuestionnaireResponseForm
                                 questionnaire={questionnaire}
-                                resource={questionnaireResponse || { resourceType: 'QuestionnaireResponse', status: 'patient', questionnaire: questionnaireId }}
+                                resource={resource}
                                 onSave={async (resource) => {
                                     const response = await saveFHIRResource({
                                         ...resource,
