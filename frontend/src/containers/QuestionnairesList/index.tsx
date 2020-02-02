@@ -16,6 +16,16 @@ export function QuestionnairesList() {
         return (
             <>
                 <div style={{ maxWidth: '900px' }}>
+                    <p>The application provides the following features:</p>
+                    <ul>
+                        <li>
+
+                            Form-builder UI to create custom FHIR questionnaires
+                        </li>
+                        <li>
+                            An ability to populate data by defining FHIRPath Expressions
+                        </li>
+                    </ul>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <h2>Questionnaires</h2>
                         <Link to='/questionnaire/new'>
