@@ -11,7 +11,7 @@ axiosInstance.defaults.auth = {
     password: 'secret',
 }
 
-if (window.location.origin === 'http://rgv.beda.software') {
+if (window.location.origin === 'http://rgv.beda.software' || window.location.origin === 'http://ui.hl7.beda.software/') {
     axiosInstance.defaults.baseURL = 'http://api.rgv.beda.software';
 } else {
     axiosInstance.defaults.baseURL = 'http://localhost:8080';
