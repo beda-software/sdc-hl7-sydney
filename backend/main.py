@@ -187,9 +187,10 @@ async def handle_item(item, env, fhir_format):
                     data = (await resp.json())['data']
                     if len(data):
                         if fhir_format:
-                            root["answer"] = [{"valueString": data[0]}]
+                            t = "value{}".format(item["type"].capitalize())
+                            root["answer"] = [{t: data[0]}]
                         else:
-                            root["answer"] = [{"value": {"string": data[0]}}]
+                            root["answer"] = [{"value": {item['type']: data[0]}}]
         except aiohttp.web.HTTPException:
             pass
     if 'item' in item:

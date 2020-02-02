@@ -86,7 +86,7 @@ function Questions() {
               <InputField name={`${name}.text`} label="Question description" />
             </Col>
             <Col span={11}>
-              <SelectField name={`${name}.type`} label="Question type" options={["string", "integer"]} />
+              <SelectField name={`${name}.type`} label="Question type" options={["string", "integer", "text", "date", "dateTime"]} />
             </Col>
             <Col span={2}>
               <Button
