@@ -51,7 +51,46 @@ resources = {
                 "id": "User"
             }
         },
-    }
+    },
+    'Attribute': {
+        'Questionnaire.sourceQueries': {
+            'type': {'resourceType': 'Entity',  'id': 'Reference'},
+            'path': ['sourceQueries'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-sourceQueries',
+        },
+        'Questionnaire.launchContext': {
+            # 'type': {'resourceType': 'Entity',  'id': 'string'},
+            'path': ['launchContext'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext',
+            # 'isCollection': True,
+        },
+        'Questionnaire.launchContext.name': {
+            'type': {'resourceType': 'Entity',  'id': 'id'},
+            'path': ['launchContext', 'name'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'name',
+        },
+        'Questionnaire.launchContext.type': {
+            'type': {'resourceType': 'Entity',  'id': 'code'},
+            'path': ['launchContext', 'type'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'type',
+        },
+        'Questionnaire.launchContext.description': {
+            'type': {'resourceType': 'Entity',  'id': 'string'},
+            'path': ['launchContext', 'description'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'description',
+        },
+        'Questionnaire.item.initialExpression': {
+            'type': {'resourceType': 'Entity',  'id': 'Expression'},
+            'path': ['item', 'initialExpression'],
+            'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
+            'extensionUrl': 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression',
+        },
+    },
 }
 
 sdk = SDK(settings, resources=resources)
