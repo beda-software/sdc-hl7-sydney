@@ -182,9 +182,9 @@ async def handle_item(item, env):
                                           "expr": item['initialExpression']['expression'],
                                           "env": env,
                                       })
-            data = await resp.json()
-            value = data['data'][0]
-            root["answer"] = [{"valueString": value}]
+            data = (await resp.json())['data']
+            if len(data):
+                root["answer"] = [{"value": {"string": data[0]}}]
     if 'item' in item:
         root["item"] = []
         for i in item['item']:
@@ -194,7 +194,7 @@ async def handle_item(item, env):
 
 
 @sdk.operation(["POST"],
-               ["fhir", "Questionnaire", {"name": "id"}, "$populate"],
+               ["Questionnaire", {"name": "id"}, "$populate"],
                public=True)
 async def populate_questionnaire(operation, request):
     env = {}

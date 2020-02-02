@@ -1,15 +1,18 @@
 import React from 'react'
 import { getFHIRResource, makeReference, saveFHIRResource } from '../../contrib/aidbox-react/services/fhir';
-import { Questionnaire, id } from '../../contrib/aidbox';
+import { mapSuccess, service } from '../../contrib/aidbox-react/services/service';
+import { Questionnaire, id, Parameters, QuestionnaireResponse } from '../../contrib/aidbox';
 import { isSuccess } from '../../contrib/aidbox-react/libs/remoteData';
 import { Resolver } from '../../components/ResolverNew'
 import { QuestionnaireResponseForm } from '../../components/QuestionnaireResponseForm';
 import { getFHIRCurrentDateTime } from '../../utils/date';
 import { notification } from 'antd';
 
-// interface Props {
+interface Data {
+    questionnaire: Questionnaire,
+    questionnaireResponse?: QuestionnaireResponse,
 
-// }
+}
 
 export function NewQuestionnaireResponseControl(props: any) {
     const questionnaireId: id = props.match.params.id
@@ -18,23 +21,53 @@ export function NewQuestionnaireResponseControl(props: any) {
 
     return (
         <>
-            <Resolver
-                resolve={() =>
-                    getFHIRResource<Questionnaire>(
+            <Resolver<Data>
+                resolve={async () => {
+                    const questionnaire = await getFHIRResource<Questionnaire>(
                         makeReference(
                             'Questionnaire',
                             questionnaireId
                         )
-                    )
-                }
+                    );
+                    if(isSuccess(questionnaire)) {
+                        if(questionnaire.data.launchContext) {
+                            const { name, type } = questionnaire.data.launchContext;
+                            const context = await getFHIRResource({resourceType: type, id: 'example'});
+                            if (isSuccess(context)) {
+                                const params:Parameters = {
+                                    resourceType: "Parameters",
+                                    parameter: [{name, resource: context.data}]
+
+                                };
+                                const populated = await service<QuestionnaireResponse>({
+                                    method: 'POST',
+                                    url: `/Questionnaire/${questionnaireId}/$populate`,
+                                    data: params,
+                                });
+                                if(isSuccess(populated)) {
+                                    return mapSuccess(questionnaire, (q) => ({
+                                        questionnaire: q,
+                                        questionnaireResponse: populated.data,
+                                    }));
+                                }
+
+
+                            }
+                        }
+
+                    }
+                    return mapSuccess(questionnaire, (q) => ({questionnaire: q}));
+                } }
             >
-                {({ data: questionnaire }) => {
+                {({ data }) => {
+                    const { questionnaire, questionnaireResponse } = data;
+                    console.log(questionnaireResponse);
                     return (
                         <>
                             <h2>New {questionnaire.title}</h2>
                             <QuestionnaireResponseForm
                                 questionnaire={questionnaire}
-                                resource={{ resourceType: 'QuestionnaireResponse', status: 'patient', questionnaire: questionnaireId }}
+                                resource={questionnaireResponse || { resourceType: 'QuestionnaireResponse', status: 'patient', questionnaire: questionnaireId }}
                                 onSave={async (resource) => {
                                     const response = await saveFHIRResource({
                                         ...resource,

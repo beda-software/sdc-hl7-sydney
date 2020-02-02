@@ -26074,6 +26074,11 @@ export interface Questionnaire {
      * A particular question, question grouping or display text that is part of the questionnaire.
      */
     item?: QuestionnaireItem[];
+    launchContext?: {
+        name: string;
+        type: string;
+        description: string;
+    }
 }
 /**
  * A particular question, question grouping or display text that is part of the questionnaire.
@@ -26171,6 +26176,8 @@ export interface QuestionnaireItem {
      * Template for resource generation
      */
     generatedResourceTemplate?: any;
+
+    initialExpression?: Expression;
 }
 /**
  * A constraint indicating that this item should only be enabled (displayed/allow answers to be captured) when the specified condition is true.

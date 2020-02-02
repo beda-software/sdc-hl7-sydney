@@ -80,6 +80,7 @@ function Questions() {
 
       {fields.map((name, index) => {
         return (
+          <>
           <Row key={`${index}-${name}`} gutter={4}>
             <Col span={11}>
               <InputField name={`${name}.text`} label="Question description" />
@@ -95,6 +96,12 @@ function Questions() {
               />
             </Col>
           </Row>
+          <Row>
+            <Col span={22}>
+              <InputField name={`${name}.initialExpression.expression`} label="FHIRPath expression"/>
+            </Col>
+          </Row>
+          </>
         );
       })}
     </Form.Item>
@@ -103,7 +110,15 @@ function Questions() {
 
 export function QuestionnaireForm(props: QuestionnaireFormProps) {
   const questionnaireId = props.match.params.id;
-  let questionnaire: Questionnaire = { resourceType: 'Questionnaire', status: 'active' };
+  let questionnaire: Questionnaire = {
+    resourceType: 'Questionnaire',
+    status: 'active',
+    launchContext: {
+      name: "LaunchPatient",
+      type: "Patient",
+      description: "The patient that is to be used to pre-populate the form",
+    },
+  };
 
   const [response] = useService<Questionnaire>(async () => (
     getFHIRResource({ resourceType: 'Questionnaire', id: questionnaireId })
@@ -116,7 +131,12 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
   async function onSubmit(data: any) {
     const questionnaire: Questionnaire = data;
     _.each(questionnaire.item, (item) => {
-      item.linkId = _.replace(item.text!, /\s+/g, '-')
+      item.linkId = _.replace(item.text!, /\s+/g, '-');
+      if(item.initialExpression && item.initialExpression.expression && item.initialExpression.expression !== "") {
+        item.initialExpression.language = 'text/fhirpath';
+      } else {
+        delete item.initialExpression;
+      }
     })
 
     const result = await saveFHIRResource(questionnaire)
