@@ -232,6 +232,7 @@ async def populate_questionnaire(request, fhir_format=False):
         id=request["route-params"]["id"])
     root = {
         "resourceType": "QuestionnaireResponse",
+        "questionnaire": request["route-params"]["id"]
         "item": []
     }
     for item in questionnaire['item']:
