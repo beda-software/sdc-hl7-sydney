@@ -3,6 +3,7 @@ import logging
 import coloredlogs
 import time
 import asyncio
+import aiohttp
 from aiohttp import web
 from datetime import datetime
 from sqlalchemy.sql.expression import select, insert
@@ -171,20 +172,33 @@ async def sync_questionnaire(questionnarie):
     logging.debug("SearchQuery %s", search_query)
 
 
-def handle_item(item):
+async def handle_item(item, env):
     if 'initialExpression' in item:
-        logging.debug(item['initialExpression'])
+        async with aiohttp.ClientSession() as session:
+             resp = await session.post('http://fhirpath.hl7.beda.software/',
+                                       json={
+                                           "data": {},
+                                           "expr": item['initialExpression']['expression'],
+                                           "env": env,
+                                       })
+             data = await resp.text()
+             logging.debug(data)
     if 'item' in item:
         for i in item['item']:
-            handle_item(i)
+            await handle_item(i, env)
 
 
 @sdk.operation(["POST"],
                ["fhir", "Questionnaire", {"name": "id"}, "$populate"],
                public=True)
 async def populate_questionnaire(operation, request):
+    env = {}
+    for param in request['resource']['parameter']:
+        if 'resource' in param:
+            env[param['name']] = param['resource']
+
     questionnaire = await sdk.client.resources('Questionnaire').get(
         id=request["route-params"]["id"])
     for item in questionnaire['item']:
-        handle_item(item)
+        await handle_item(item, env)
     return web.json_response({})

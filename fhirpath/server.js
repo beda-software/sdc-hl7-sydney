@@ -23,6 +23,7 @@ app.post('/', (req, res) => {
     const expr = body.expr;
     const env = body.env;
     // console.log(body, data, expr);
+    res.setHeader('content-type', 'application/json');
     res.send(fhirpath.evaluate(data, expr, env, fhirpath_r4_model));
 });
 
