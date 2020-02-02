@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: registry.bro.engineering/rgv-hie-hackathon/environment/frontend
   tag: master
-  hash: initial-hash-10
+  hash: initial-hash-11
   pullPolicy: Always
 
 service:
