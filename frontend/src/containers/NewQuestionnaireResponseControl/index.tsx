@@ -32,7 +32,7 @@ export function NewQuestionnaireResponseControl(props: any) {
                     );
                     if(isSuccess(questionnaire)) {
                         if(questionnaire.data.launchContext) {
-                            const { name, type } = questionnaire.data.launchContext;
+                            const { name, type } = questionnaire.data.launchContext[0]!;
                             const context = await getFHIRResource({resourceType: type, id: 'example'});
                             if (isSuccess(context)) {
                                 const params:Parameters = {

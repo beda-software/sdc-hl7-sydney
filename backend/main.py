@@ -102,7 +102,7 @@ resources = {
             'path': ['launchContext'],
             'resource': {'resourceType': 'Entity', 'id': 'Questionnaire'},
             'extensionUrl': 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext',
-            # 'isCollection': True,
+            'isCollection': True,
         },
         'Questionnaire.launchContext.name': {
             'type': {'resourceType': 'Entity',  'id': 'id'},

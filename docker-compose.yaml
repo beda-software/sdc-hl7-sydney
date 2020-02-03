@@ -23,7 +23,7 @@ services:
       - ./config:/var/config:cached
       - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh:cached
   devbox:
-    image: "healthsamurai/devbox:0.4.7"
+    image: "healthsamurai/devbox:0.4.8-P2"
     command: ["wait-for-it.sh", "database:5432", "--strict", "--timeout=0", "--", "java", "-jar", "/aidbox.jar", "-m", "devbox.core"]
     depends_on:
       - devbox-db

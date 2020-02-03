@@ -1,8 +1,8 @@
 replicaCount: 1
 image:
   repository: healthsamurai/devbox
-  tag: 0.4.7
-  hash: 633006d751a6c14e09de0c13b31fa012af812196d43c1609b315934d87ecef7a 
+  tag: 0.4.8-P2
+  hash: 4aeb4aeb3e9e3013d78a111a790b17f6288e9e1e76469dc3d0897e0fad0ace9a
   pullPolicy: Always
 
 service:
