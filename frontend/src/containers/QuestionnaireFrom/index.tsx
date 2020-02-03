@@ -127,11 +127,11 @@ export function QuestionnaireForm(props: QuestionnaireFormProps) {
       text: "Questions", 
       type: 'group',
     }],
-    launchContext: {
+    launchContext: [{
       name: "LaunchPatient",
       type: "Patient",
       description: "The patient that is to be used to pre-populate the form",
-    },
+    }],
   };
 
   const [response] = useService<Questionnaire>(async () => (

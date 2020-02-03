@@ -26074,11 +26074,11 @@ export interface Questionnaire {
      * A particular question, question grouping or display text that is part of the questionnaire.
      */
     item?: QuestionnaireItem[];
-    launchContext?: {
+    launchContext?: Array<{
         name: string;
         type: string;
         description: string;
-    }
+    }>
 }
 /**
  * A particular question, question grouping or display text that is part of the questionnaire.
