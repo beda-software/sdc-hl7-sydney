@@ -11,7 +11,7 @@
     "@types/react-dom": "16.9.4",
     "@types/react-router-dom": "^5.1.2",
     "@types/react-select": "^3.0.8",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "ajv-errors": "^1.0.1",
     "ajv-keywords": "^3.4.1",
     "antd": "^3.25.0",
